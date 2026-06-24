@@ -14,6 +14,8 @@ export default function Formulaire() {
     const data = {
       nom: (form.elements.namedItem('nom') as HTMLInputElement).value,
       prenom: (form.elements.namedItem('prenom') as HTMLInputElement).value,
+      email: (form.elements.namedItem('email') as HTMLInputElement).value,
+      telephone: (form.elements.namedItem('telephone') as HTMLInputElement).value,
     }
 
     const res = await fetch('/api/demande', {
@@ -49,6 +51,57 @@ export default function Formulaire() {
               <label className="block text-sm font-medium mb-1">Prénom</label>
               <input name="prenom" required className="w-full border rounded-lg px-3 py-2 text-sm" />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Email</label>
+            <input name="email" type="email" required className="w-full border rounded-lg px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Téléphone</label>
+            <input name="telephone" className="w-full border rounded-lg px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Type de client</label>
+            <select name="type_client" required className="w-full border rounded-lg px-3 py-2 text-sm">
+              <option value="">-- Choisir --</option>
+              <option value="particulier">Particulier</option>
+              <option value="entreprise">Entreprise</option>
+              <option value="association">Association</option>
+              <option value="collectivite">Collectivité</option>
+            </select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Ville de départ</label>
+              <input name="ville_depart" required className="w-full border rounded-lg px-3 py-2 text-sm" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Ville de destination</label>
+              <input name="ville_destination" required className="w-full border rounded-lg px-3 py-2 text-sm" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Date de départ</label>
+            <input name="date_depart" type="date" required className="w-full border rounded-lg px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Nombre de passagers</label>
+            <input name="nb_passagers" type="number" min="1" required className="w-full border rounded-lg px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Type de trajet</label>
+            <select name="type_trajet" required className="w-full border rounded-lg px-3 py-2 text-sm">
+              <option value="">-- Choisir --</option>
+              <option value="simple">Aller simple</option>
+              <option value="aller-retour">Aller-retour</option>
+            </select>
           </div>
 
           <button
