@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dernière relance — Votre devis NeoTravel expire bientôt</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:Arial,Helvetica,sans-serif; background:#f5f5f5; color:#1a1a1a; }
+    .wrapper { max-width:600px; margin:0 auto; background:#fff; }
+    .header { background:#1a1a1a; padding:28px 32px; text-align:center; }
+    .header-logo { color:#fff; font-size:22px; font-weight:700; letter-spacing:0.05em; }
+    .header-tagline { color:#999; font-size:12px; margin-top:4px; }
+    .hero { background:#fff5f5; border-bottom:3px solid #cc2929; padding:28px 32px; }
+    .hero-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#cc2929; margin-bottom:6px; }
+    .hero-title { font-size:20px; font-weight:700; color:#7a0000; }
+    .body { padding:28px 32px; }
+    .salutation { font-size:15px; margin-bottom:16px; }
+    .intro { font-size:14px; color:#444; line-height:1.6; margin-bottom:24px; }
+    .urgency-box { background:#fff5f5; border:1.5px solid #cc2929; border-radius:8px; padding:16px 18px; margin-bottom:24px; text-align:center; }
+    .urgency-label { font-size:12px; color:#cc2929; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+    .urgency-date { font-size:20px; font-weight:700; color:#7a0000; }
+    .recap-card { border:1.5px solid #e0e0e0; border-radius:8px; padding:16px 18px; margin-bottom:24px; background:#fafafa; }
+    .recap-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#999; margin-bottom:10px; }
+    .recap-row { display:flex; justify-content:space-between; font-size:13px; padding:5px 0; border-bottom:1px solid #eee; }
+    .recap-row:last-child { border-bottom:none; }
+    .recap-label { color:#666; }
+    .recap-value { font-weight:500; }
+    .recap-amount { font-size:18px; font-weight:700; color:#1D9E75; margin-top:10px; text-align:right; }
+    .cta-section { text-align:center; margin-bottom:24px; }
+    .cta-btn { display:inline-block; background:#cc2929; color:#fff; text-decoration:none; padding:14px 32px; border-radius:6px; font-size:15px; font-weight:600; }
+    .contact-offer { background:#f0f0f0; border-radius:8px; padding:16px 18px; font-size:13px; color:#444; line-height:1.6; margin-bottom:24px; }
+    .closing { font-size:13px; color:#666; line-height:1.6; margin-bottom:24px; }
+    .separator { border:none; border-top:1px solid #e8e8e8; margin:24px 0; }
+    .footer { background:#f5f5f5; padding:20px 32px; text-align:center; }
+    .footer-text { font-size:11px; color:#999; line-height:1.6; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div class="header-logo">NEOTRAVEL</div>
+      <div class="header-tagline">Transport de groupe — Simple, rapide, fiable</div>
+    </div>
+    <div class="hero">
+      <div class="hero-label">Dernière relance</div>
+      <div class="hero-title">Votre devis expire très prochainement</div>
+    </div>
+    <div class="body">
+      <div class="salutation">Bonjour {{prenom}} {{nom}},</div>
+      <div class="intro">C'est notre dernier rappel. Si votre projet a évolué ou si vous avez fait un autre choix, nous le comprenons.</div>
+      <div class="urgency-box">
+        <div class="urgency-label">Expiration du devis</div>
+        <div class="urgency-date">{{date_validite}}</div>
+      </div>
+      <div class="recap-card">
+        <div class="recap-title">Votre devis {{ref_devis}}</div>
+        <div class="recap-row"><span class="recap-label">Trajet</span><span class="recap-value">{{ville_depart}} → {{ville_destination}}</span></div>
+        <div class="recap-row"><span class="recap-label">Date de départ</span><span class="recap-value">{{date_depart}}</span></div>
+        <div class="recap-row"><span class="recap-label">Passagers</span><span class="recap-value">{{nb_passagers}} personnes</span></div>
+        <div class="recap-amount">{{montant_ttc}} € TTC</div>
+      </div>
+      <div class="cta-section"><a href="{{pdf_url}}" class="cta-btn">Accéder à mon devis</a></div>
+      <div class="contact-offer"><strong>Une question ? Un ajustement ?</strong><br>Dites-le nous — nous pouvons revoir le devis selon vos contraintes.</div>
+      <div class="closing">Après cette date, nous clôturerons votre dossier.</div>
+      <hr class="separator">
+      <div class="closing" style="font-style:normal;color:#555;">Cordialement,<br><strong>L'équipe NeoTravel</strong></div>
+    </div>
+    <div class="footer"><div class="footer-text">NeoTravel — Ceci est notre dernier message concernant ce devis.<br>© 2026 NeoTravel.</div></div>
+  </div>
+</body>
+</html>

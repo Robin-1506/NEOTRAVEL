@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votre demande NeoTravel — Un conseiller vous contacte</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:Arial,Helvetica,sans-serif; background:#f5f5f5; color:#1a1a1a; }
+    .wrapper { max-width:600px; margin:0 auto; background:#fff; }
+    .header { background:#1a1a1a; padding:28px 32px; text-align:center; }
+    .header-logo { color:#fff; font-size:22px; font-weight:700; letter-spacing:0.05em; }
+    .header-tagline { color:#999; font-size:12px; margin-top:4px; }
+    .hero { background:#eef4fd; border-bottom:3px solid #2563b0; padding:28px 32px; }
+    .hero-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#2563b0; margin-bottom:6px; }
+    .hero-title { font-size:20px; font-weight:700; color:#0f2e5e; }
+    .body { padding:28px 32px; }
+    .salutation { font-size:15px; margin-bottom:16px; }
+    .intro { font-size:14px; color:#444; line-height:1.6; margin-bottom:24px; }
+    .confirm-box { background:#eef4fd; border:1.5px solid #2563b0; border-radius:8px; padding:16px 18px; margin-bottom:24px; display:flex; gap:14px; }
+    .confirm-icon { font-size:24px; flex-shrink:0; }
+    .confirm-title { font-size:13px; font-weight:700; color:#0f2e5e; margin-bottom:6px; }
+    .confirm-text { font-size:13px; color:#1e3a6e; line-height:1.5; }
+    .recap-card { border:1.5px solid #e0e0e0; border-radius:8px; padding:16px 18px; margin-bottom:24px; background:#fafafa; }
+    .recap-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#999; margin-bottom:10px; }
+    .recap-row { display:flex; justify-content:space-between; font-size:13px; padding:5px 0; border-bottom:1px solid #eee; }
+    .recap-row:last-child { border-bottom:none; }
+    .recap-label { color:#666; }
+    .recap-value { font-weight:500; }
+    .timeline { margin-bottom:24px; }
+    .timeline-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#999; margin-bottom:12px; }
+    .timeline-step { display:flex; gap:12px; margin-bottom:10px; }
+    .step-dot { width:24px; height:24px; border-radius:50%; background:#2563b0; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .step-title { font-size:13px; font-weight:600; }
+    .step-desc { font-size:12px; color:#666; margin-top:2px; }
+    .contact { font-size:13px; color:#555; line-height:1.6; margin-bottom:24px; }
+    .separator { border:none; border-top:1px solid #e8e8e8; margin:24px 0; }
+    .footer { background:#f5f5f5; padding:20px 32px; text-align:center; }
+    .footer-text { font-size:11px; color:#999; line-height:1.6; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div class="header-logo">NEOTRAVEL</div>
+      <div class="header-tagline">Transport de groupe — Simple, rapide, fiable</div>
+    </div>
+    <div class="hero">
+      <div class="hero-label">Demande reçue</div>
+      <div class="hero-title">Un conseiller prend en charge votre dossier</div>
+    </div>
+    <div class="body">
+      <div class="salutation">Bonjour {{prenom}} {{nom}},</div>
+      <div class="intro">Votre projet présente des caractéristiques spécifiques qui méritent l'attention personnalisée d'un conseiller spécialisé.</div>
+      <div class="confirm-box">
+        <div class="confirm-icon">✅</div>
+        <div>
+          <div class="confirm-title">Votre dossier a été transmis</div>
+          <div class="confirm-text">Un conseiller NeoTravel reviendra vers vous <strong>sous 24 heures ouvrées</strong>.</div>
+        </div>
+      </div>
+      <div class="recap-card">
+        <div class="recap-title">Récapitulatif de votre demande</div>
+        <div class="recap-row"><span class="recap-label">Trajet</span><span class="recap-value">{{ville_depart}} → {{ville_destination}}</span></div>
+        <div class="recap-row"><span class="recap-label">Date de départ</span><span class="recap-value">{{date_depart}}</span></div>
+        <div class="recap-row"><span class="recap-label">Passagers</span><span class="recap-value">{{nb_passagers}} personnes</span></div>
+        <div class="recap-row"><span class="recap-label">Référence dossier</span><span class="recap-value">{{ref_demande}}</span></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-title">La suite de votre parcours</div>
+        <div class="timeline-step"><div class="step-dot">1</div><div><div class="step-title">Analyse de votre dossier</div><div class="step-desc">Notre conseiller étudie vos besoins et identifie les partenaires disponibles.</div></div></div>
+        <div class="timeline-step"><div class="step-dot">2</div><div><div class="step-title">Contact sous 24h ouvrées</div><div class="step-desc">Votre conseiller vous contacte pour affiner la proposition.</div></div></div>
+        <div class="timeline-step"><div class="step-dot">3</div><div><div class="step-title">Devis personnalisé</div><div class="step-desc">Vous recevez un devis sur-mesure correspondant exactement à votre projet.</div></div></div>
+      </div>
+      <div class="contact">Demande urgente ?<br><strong>📧 contact@neotravel.fr — 📞 01 XX XX XX XX</strong></div>
+      <hr class="separator">
+      <div class="contact">Cordialement,<br><strong>L'équipe NeoTravel</strong></div>
+    </div>
+    <div class="footer"><div class="footer-text">NeoTravel — Transport de groupe sur-mesure depuis 2010<br>© 2026 NeoTravel.</div></div>
+  </div>
+</body>
+</html>

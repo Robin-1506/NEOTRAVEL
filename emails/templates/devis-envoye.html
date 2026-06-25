@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votre devis NeoTravel</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:Arial,Helvetica,sans-serif; background:#f5f5f5; color:#1a1a1a; }
+    .wrapper { max-width:600px; margin:0 auto; background:#fff; }
+    .header { background:#1a1a1a; padding:28px 32px; text-align:center; }
+    .header-logo { color:#fff; font-size:22px; font-weight:700; letter-spacing:0.05em; }
+    .header-tagline { color:#999; font-size:12px; margin-top:4px; }
+    .hero { background:#f0faf5; border-bottom:3px solid #1D9E75; padding:28px 32px; }
+    .hero-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#1D9E75; margin-bottom:6px; }
+    .hero-title { font-size:22px; font-weight:700; color:#0a3d33; line-height:1.2; }
+    .body { padding:28px 32px; }
+    .salutation { font-size:15px; margin-bottom:16px; }
+    .intro { font-size:14px; color:#444; line-height:1.6; margin-bottom:24px; }
+    .devis-card { border:1.5px solid #e0e0e0; border-radius:8px; overflow:hidden; margin-bottom:24px; }
+    .devis-card-header { background:#1a1a1a; color:#fff; padding:12px 18px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; display:flex; justify-content:space-between; align-items:center; }
+    .devis-ref { color:#aaa; font-size:11px; font-weight:400; }
+    .devis-card-body { padding:18px; }
+    .devis-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f0f0f0; font-size:13px; }
+    .devis-row:last-child { border-bottom:none; }
+    .devis-row-label { color:#666; }
+    .devis-row-value { font-weight:500; }
+    .devis-total { background:#f0faf5; border-radius:6px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+    .devis-total-label { font-size:13px; font-weight:600; color:#0a3d33; }
+    .devis-total-amount { font-size:22px; font-weight:700; color:#1D9E75; }
+    .cta-section { text-align:center; margin-bottom:24px; }
+    .cta-btn { display:inline-block; background:#1D9E75; color:#fff; text-decoration:none; padding:14px 32px; border-radius:6px; font-size:15px; font-weight:600; }
+    .validity { background:#fff8ec; border:1px solid #f0c040; border-radius:6px; padding:12px 16px; font-size:13px; color:#7a5000; margin-bottom:24px; }
+    .contact { font-size:13px; color:#555; line-height:1.6; margin-bottom:24px; }
+    .separator { border:none; border-top:1px solid #e8e8e8; margin:24px 0; }
+    .footer { background:#f5f5f5; padding:20px 32px; text-align:center; }
+    .footer-text { font-size:11px; color:#999; line-height:1.6; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div class="header-logo">NEOTRAVEL</div>
+      <div class="header-tagline">Transport de groupe — Simple, rapide, fiable</div>
+    </div>
+    <div class="hero">
+      <div class="hero-label">Votre devis est prêt</div>
+      <div class="hero-title">Votre proposition personnalisée NeoTravel</div>
+    </div>
+    <div class="body">
+      <div class="salutation">Bonjour {{prenom}} {{nom}},</div>
+      <div class="intro">Merci pour votre demande. Voici votre devis personnalisé pour votre trajet de groupe.</div>
+      <div class="devis-card">
+        <div class="devis-card-header">Détail de votre devis<span class="devis-ref">Réf. {{ref_devis}}</span></div>
+        <div class="devis-card-body">
+          <div class="devis-row"><span class="devis-row-label">Trajet</span><span class="devis-row-value">{{ville_depart}} → {{ville_destination}}</span></div>
+          <div class="devis-row"><span class="devis-row-label">Date de départ</span><span class="devis-row-value">{{date_depart}}</span></div>
+          <div class="devis-row"><span class="devis-row-label">Passagers</span><span class="devis-row-value">{{nb_passagers}} personnes</span></div>
+          <div class="devis-row"><span class="devis-row-label">Montant HT</span><span class="devis-row-value">{{montant_ht}} €</span></div>
+          <div class="devis-row"><span class="devis-row-label">TVA (10%)</span><span class="devis-row-value">{{tva}} €</span></div>
+          <div class="devis-total"><span class="devis-total-label">Total TTC</span><span class="devis-total-amount">{{montant_ttc}} €</span></div>
+        </div>
+      </div>
+      <div class="cta-section"><a href="{{pdf_url}}" class="cta-btn">⬇ Télécharger mon devis PDF</a></div>
+      <div class="validity"><strong>Validité :</strong> Ce devis est valable jusqu'au <strong>{{date_validite}}</strong>.</div>
+      <div class="contact">Pour accepter ou poser une question, répondez simplement à cet email.</div>
+      <hr class="separator">
+      <div class="contact">Cordialement,<br><strong>L'équipe NeoTravel</strong><br>contact@neotravel.fr</div>
+    </div>
+    <div class="footer"><div class="footer-text">NeoTravel — Transport de groupe sur-mesure depuis 2010<br>© 2026 NeoTravel.</div></div>
+  </div>
+</body>
+</html>
