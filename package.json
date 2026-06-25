@@ -6,11 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:email": "node -e \"require('./emails/send').verifyConnection()\"",
+    "test:send": "node emails/send.js"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "lucide-react": "^1.21.0",
     "next": "16.2.9",
+    "nodemailer": "^9.0.1",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
