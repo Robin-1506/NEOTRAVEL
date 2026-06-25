@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
     const data = await req.json()
 
     const response = await fetch(
-        `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_DEMANDES_NAME}`,
+        `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_DEMANDES}`,
         {
             method: 'POST',
             headers: {
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (!response.ok) {
         const error = await response.json()
         console.error('Erreur Airtable complète:', JSON.stringify(error, null, 2))
-        console.error('URL appelée:', `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_DEMANDES_NAME}`)
+        console.error('URL appelée:', `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_DEMANDES}`)
         console.error('Clé API (5 premiers caractères):', process.env.AIRTABLE_API_KEY?.slice(0, 5))
         return NextResponse.json({ error: 'Erreur Airtable' }, { status: 500 })
     }
