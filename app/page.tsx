@@ -1,7 +1,83 @@
-import React from 'react';
-import { Zap, ShieldCheck, Headphones, Send, User } from 'lucide-react';
+"use client";
+
+import React, { useState } from 'react';
+import { Zap, ShieldCheck, Headphones, Send } from 'lucide-react';
+import Link from 'next/link';
+
+// Define the structure of a chat message
+interface Message {
+  id: number;
+  sender: 'bot' | 'user';
+  text: string;
+}
 
 export default function Home() {
+  // State to store the conversation history
+  const [messages, setMessages] = useState<Message[]>([
+    { id: 1, sender: 'bot', text: 'Bonjour ! 👋\nOù souhaitez-vous voyager ?' }
+  ]);
+  
+  // State to store the current text in the input field
+  const [inputValue, setInputValue] = useState('');
+  
+  // State to show the typing indicator while waiting for the API
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Function to handle sending the message to the backend
+  const handleSendMessage = async () => {
+    if (!inputValue.trim()) return;
+
+    // 1. Add user's message to the UI immediately
+    const newUserMsg: Message = { id: Date.now(), sender: 'user', text: inputValue };
+    setMessages((prev) => [...prev, newUserMsg]);
+    
+    // 2. Clear input field and show loading state
+    const currentInput = inputValue;
+    setInputValue(''); 
+    setIsLoading(true);
+
+    try {
+      // 3. Send data to the Next.js API route (Webhook bridge)
+      const response = await fetch('/api/demande', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: currentInput }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Server connection error');
+      }
+
+      // 4. Receive and display the AI's response
+      const data = await response.json();
+      
+      setMessages((prev) => [
+        ...prev, 
+        { id: Date.now() + 1, sender: 'bot', text: data.reply || "Désolé, je n'ai pas pu comprendre votre demande." }
+      ]);
+
+    } catch (error) {
+      console.error("Message sending error:", error);
+      // Fallback message if the API fails
+      setMessages((prev) => [
+        ...prev, 
+        { id: Date.now() + 1, sender: 'bot', text: "Une erreur s'est produite de notre côté. Veuillez réessayer plus tard." }
+      ]);
+    } finally {
+      // Hide loading state regardless of success or failure
+      setIsLoading(false);
+    }
+  };
+
+  // Function to trigger send when hitting the Enter key
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white text-gray-800 font-sans">
       {/* HEADER */}
@@ -53,7 +129,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* CHATBOT UI (Static pour l'instant) */}
+        {/* CHATBOT UI */}
         <div className="mt-16 max-w-3xl mx-auto border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
           {/* Chat Header */}
           <div className="bg-[#F1F4EB] px-6 py-4 flex items-center gap-3 border-b border-gray-200">
@@ -70,48 +146,71 @@ export default function Home() {
           </div>
 
           {/* Chat Messages */}
-          <div className="p-6 space-y-6 bg-white min-h-[300px]">
-            {/* Bot Message */}
-            <div className="flex items-start gap-3">
-              <div className="bg-[#F6F6F3] text-gray-800 p-4 rounded-2xl rounded-tl-none max-w-[80%] text-sm">
-                <p>Bonjour ! 👋</p>
-                <p className="mt-2">Où souhaitez-vous voyager ?</p>
+          <div className="p-6 space-y-6 bg-white h-[350px] overflow-y-auto">
+            {messages.map((msg) => (
+              <div key={msg.id} className={`flex items-start gap-3 ${msg.sender === 'user' ? 'justify-end' : ''}`}>
+                <div 
+                  className={`p-4 rounded-2xl max-w-[80%] text-sm whitespace-pre-wrap ${
+                    msg.sender === 'user' 
+                      ? 'bg-[#1A528A] text-white rounded-tr-none' 
+                      : 'bg-[#F6F6F3] text-gray-800 rounded-tl-none'
+                  }`}
+                >
+                  <p>{msg.text}</p>
+                  {msg.sender === 'user' && (
+                    <div className="text-right mt-2 text-[10px] text-blue-200 opacity-70">✓✓ Envoyé</div>
+                  )}
+                </div>
               </div>
-            </div>
-
-            {/* User Message */}
-            <div className="flex items-start gap-3 justify-end">
-              <div className="bg-[#1A528A] text-white p-4 rounded-2xl rounded-tr-none max-w-[80%] text-sm">
-                <p>Nous sommes 45 personnes et souhaitons aller de Lyon à Paris le 12 juillet.</p>
-                <div className="text-right mt-2 text-xs text-blue-200">✓✓ 10:49</div>
-              </div>
-            </div>
+            ))}
 
             {/* Typing Indicator */}
-            <div className="flex items-start gap-3">
-              <div className="bg-[#F6F6F3] p-4 rounded-2xl rounded-tl-none flex gap-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+            {isLoading && (
+              <div className="flex items-start gap-3">
+                <div className="bg-[#F6F6F3] p-4 rounded-2xl rounded-tl-none flex gap-1 items-center h-[52px]">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Chat Input */}
           <div className="p-4 bg-white border-t border-gray-100 flex items-center gap-3">
             <input 
               type="text" 
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyPress}
+              disabled={isLoading}
               placeholder="Décrivez votre projet..." 
-              className="flex-1 bg-[#F6F6F3] border border-transparent focus:border-gray-300 focus:outline-none rounded-full px-6 py-3 text-sm"
+              className="flex-1 bg-[#F6F6F3] border border-transparent focus:border-gray-300 focus:outline-none rounded-full px-6 py-3 text-sm disabled:opacity-50"
             />
-            <button className="bg-[#1A528A] text-white p-3 rounded-full hover:bg-blue-800 transition">
+            <button 
+              onClick={handleSendMessage}
+              disabled={isLoading}
+              className="bg-[#1A528A] text-white p-3 rounded-full hover:bg-blue-800 transition disabled:opacity-50"
+            >
               <Send className="w-5 h-5" />
             </button>
           </div>
         </div>
         
-        <div className="text-center mt-8">
-          <p className="text-xs text-gray-400">En continuant, vous acceptez nos CGU et notre Politique de confidentialité.</p>
+        {/* Navigation to Form Page */}
+        <div className="text-center mt-8 space-y-4">
+          <p className="text-sm text-gray-500">
+            Vous préférez un formulaire classique ?
+          </p>
+          <Link href="/formulaire">
+            <button className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm">
+              Remplir le formulaire
+            </button>
+          </Link>
+          
+          <p className="text-xs text-gray-400 pt-4">
+            En continuant, vous acceptez nos CGU et notre Politique de confidentialité.
+          </p>
         </div>
       </main>
     </div>
