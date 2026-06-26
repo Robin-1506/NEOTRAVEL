@@ -23,6 +23,9 @@ export default function Home() {
   // State to show the typing indicator while waiting for the API
   const [isLoading, setIsLoading] = useState(false);
 
+  // Unique session id for this conversation, used by the agent to keep context across messages
+  const [sessionId] = useState(() => crypto.randomUUID());
+
   // Function to handle sending the message to the backend
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
@@ -43,7 +46,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: currentInput }),
+        body: JSON.stringify({ message: currentInput, session_id: sessionId }),
       });
 
       if (!response.ok) {
