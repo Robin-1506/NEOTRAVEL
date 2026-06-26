@@ -38,7 +38,7 @@ export default function Home() {
 
     try {
       // 3. Send data to the Next.js API route (Webhook bridge)
-      const response = await fetch('/api/chat', {
+      const response = await fetch('/api/demande', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,8 +46,10 @@ export default function Home() {
         body: JSON.stringify({ message: currentInput }),
       });
 
+      // BẮT LỖI CHI TIẾT TỪ SERVER Ở ĐÂY:
       if (!response.ok) {
-        throw new Error('Server connection error');
+        const errorDetail = await response.text();
+        throw new Error(`Status ${response.status} - ${errorDetail}`);
       }
 
       // 4. Receive and display the AI's response
@@ -58,13 +60,10 @@ export default function Home() {
         { id: Date.now() + 1, sender: 'bot', text: data.reply || "Désolé, je n'ai pas pu comprendre votre demande." }
       ]);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("Message sending error:", error);
-      // Fallback message if the API fails
-      setMessages((prev) => [
-        ...prev, 
-        { id: Date.now() + 1, sender: 'bot', text: "Une erreur s'est produite de notre côté. Veuillez réessayer plus tard." }
-      ]);
+      // Hiển thị lỗi chi tiết ra màn hình đỏ để Thao dễ đọc
+      throw new Error(`Lỗi chi tiết: ${error.message}`);
     } finally {
       // Hide loading state regardless of success or failure
       setIsLoading(false);
