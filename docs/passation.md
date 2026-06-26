@@ -42,10 +42,28 @@ Depuis n8n : un nœud Code appelle ce module (ou reproduit la même logique côt
 - **Changer une variable de template** : éditer le HTML (`{{nom_variable}}`) et s'assurer que l'appelant (n8n) passe bien cette clé dans `variables`.
 - **Changer de fournisseur SMTP** : modifier uniquement la config `nodemailer.createTransport()` en haut de `send.js` — le reste du module ne change pas.
 
+### Workflow n8n des relances automatiques
+Workflow **"Relances Automatiques NeoTravel"** (id `EVevlBnIv0U8mqO5`, actif) :
+[neotravelpro.app.n8n.cloud/workflow/EVevlBnIv0U8mqO5](https://neotravelpro.app.n8n.cloud/workflow/EVevlBnIv0U8mqO5)
+
+Source SDK versionnée dans `relances/workflow-relances.n8n.js`.
+
+Logique : Schedule Trigger (toutes les heures) → recherche dans Airtable les `Relances` avec `statut = "planifiée"` et `date_planifiée` ≤ maintenant → pour chacune : récupère le Devis lié puis la Demande liée → si `nb_relances` du Devis vaut 0 → envoie le template relance 1, sinon envoie le template relance 2 **et** clôture la Demande (`statut = "clôturé"`) → met à jour les statuts dans Airtable.
+
+⚠️ Différence avec `emails/send.js` : ce workflow utilise le nœud natif **Send Email (SMTP)** de n8n avec un HTML inline simplifié (même charte graphique, mais pas une copie pixel-perfect des templates `emails/templates/*.html`). Pour une parité exacte, il faudrait remplacer ce nœud par un appel HTTP vers une route API Next.js qui wrappe `emails/send.js` — non fait pour le MVP, budget/temps limités.
+
+**Credentials requis dans n8n** (à configurer manuellement dans l'UI n8n — un secret de credential ne peut jamais être posé par API, y compris par un agent) :
+- `Airtable Personal Access Token account` (déjà existant, lié automatiquement aux nœuds Airtable)
+- `Gmail SMTP NeoTravel` : host `smtp.gmail.com`, port `465`, SSL activé, user `neotravel.devis@gmail.com`, password = App Password Gmail actuel (sans espaces)
+
+### Piège résolu — rôle de collaborateur Airtable
+Un token Airtable avec tous les scopes API (`data.records:write` etc.) **ne suffit pas** à pouvoir écrire si le compte qui le possède est invité sur la base/workspace avec le rôle collaborateur **"Lecture seule"**. Airtable applique le rôle du collaborateur comme plafond, au-dessus des scopes du token. Vérifier dans Airtable → Espace de travail → Collaborateurs → rôle de chaque compte ; il faut au minimum **"Éditeur"** pour que l'écriture (create/update record) fonctionne, que ce soit depuis n8n, un script, ou un agent.
+
 ### Limites connues du prototype
 - Pas de retry automatique en cas d'échec d'envoi (à ajouter côté n8n si besoin en prod)
 - Pas de tracking d'ouverture/clic
 - Templates HTML inline (pas de framework de templating type Handlebars/MJML) — suffisant pour le MVP mais à industrialiser si le projet continue après la soutenance
+- Le workflow de relances n'a pas encore été testé avec un envoi réel bout-en-bout (bloqué par le rôle Airtable ci-dessus au moment de la rédaction) — câblage et credentials validés via une exécution manuelle à 0 item (aucune relance "planifiée" en base à ce moment)
 
 ## 2. Pour les équipes NeoTravel (usage quotidien)
 
