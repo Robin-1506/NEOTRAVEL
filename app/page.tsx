@@ -23,6 +23,9 @@ export default function Home() {
   // State to show the typing indicator while waiting for the API
   const [isLoading, setIsLoading] = useState(false);
 
+  // Unique session id for this conversation, used by the agent to keep context across messages
+  const [sessionId] = useState(() => crypto.randomUUID());
+
   // Function to handle sending the message to the backend
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
@@ -30,23 +33,22 @@ export default function Home() {
     // 1. Add user's message to the UI immediately
     const newUserMsg: Message = { id: Date.now(), sender: 'user', text: inputValue };
     setMessages((prev) => [...prev, newUserMsg]);
-    
+
     // 2. Clear input field and show loading state
     const currentInput = inputValue;
-    setInputValue(''); 
+    setInputValue('');
     setIsLoading(true);
 
     try {
-      // 3. Send data to the Next.js API route (Webhook bridge)
-      const response = await fetch('/api/demande', {
+      // 3. Send data to the Next.js API route (Webhook bridge to the n8n AI agent)
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: currentInput }),
+        body: JSON.stringify({ message: currentInput, session_id: sessionId }),
       });
 
-      // BẮT LỖI CHI TIẾT TỪ SERVER Ở ĐÂY:
       if (!response.ok) {
         const errorDetail = await response.text();
         throw new Error(`Status ${response.status} - ${errorDetail}`);
@@ -54,16 +56,19 @@ export default function Home() {
 
       // 4. Receive and display the AI's response
       const data = await response.json();
-      
+
       setMessages((prev) => [
-        ...prev, 
+        ...prev,
         { id: Date.now() + 1, sender: 'bot', text: data.reply || "Désolé, je n'ai pas pu comprendre votre demande." }
       ]);
 
     } catch (error: any) {
       console.error("Message sending error:", error);
-      // Hiển thị lỗi chi tiết ra màn hình đỏ để Thao dễ đọc
-      throw new Error(`Lỗi chi tiết: ${error.message}`);
+      // Fallback message if the API fails
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now() + 1, sender: 'bot', text: "Une erreur s'est produite de notre côté. Veuillez réessayer plus tard." }
+      ]);
     } finally {
       // Hide loading state regardless of success or failure
       setIsLoading(false);
