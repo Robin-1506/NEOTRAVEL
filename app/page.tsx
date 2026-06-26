@@ -38,7 +38,7 @@ export default function Home() {
 
     try {
       // 3. Send data to the Next.js API route (Webhook bridge)
-      const response = await fetch('/api/demande', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
