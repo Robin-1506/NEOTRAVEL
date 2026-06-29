@@ -24,7 +24,11 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Unique session id for this conversation, used by the agent to keep context across messages
-  const [sessionId] = useState(() => crypto.randomUUID());
+  const [sessionId, setSessionId] = useState(() => crypto.randomUUID());
+
+  // True once the agent has sent a final quote (or escalated a complex case) -
+  // the conversation is then closed: input disabled, only "Nouvelle demande" remains
+  const [conversationTerminee, setConversationTerminee] = useState(false);
 
   // Function to handle sending the message to the backend
   const handleSendMessage = async () => {
@@ -62,6 +66,10 @@ export default function Home() {
         { id: Date.now() + 1, sender: 'bot', text: data.reply || "Désolé, je n'ai pas pu comprendre votre demande." }
       ]);
 
+      if (data.conversation_terminee) {
+        setConversationTerminee(true);
+      }
+
     } catch (error: any) {
       console.error("Message sending error:", error);
       // Fallback message if the API fails
@@ -80,6 +88,16 @@ export default function Home() {
     if (e.key === 'Enter') {
       handleSendMessage();
     }
+  };
+
+  // Resets the chat to start a brand new request: fresh session id, fresh history
+  const handleNouvelleDemande = () => {
+    setSessionId(crypto.randomUUID());
+    setConversationTerminee(false);
+    setInputValue('');
+    setMessages([
+      { id: Date.now(), sender: 'bot', text: 'Bonjour ! 👋\nOù souhaitez-vous voyager ?' }
+    ]);
   };
 
   return (
@@ -180,24 +198,35 @@ export default function Home() {
             )}
           </div>
 
-          {/* Chat Input */}
+          {/* Chat Input / Nouvelle demande */}
           <div className="p-4 bg-white border-t border-gray-100 flex items-center gap-3">
-            <input 
-              type="text" 
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyPress}
-              disabled={isLoading}
-              placeholder="Décrivez votre projet..." 
-              className="flex-1 bg-[#F6F6F3] border border-transparent focus:border-gray-300 focus:outline-none rounded-full px-6 py-3 text-sm disabled:opacity-50"
-            />
-            <button 
-              onClick={handleSendMessage}
-              disabled={isLoading}
-              className="bg-[#1A528A] text-white p-3 rounded-full hover:bg-blue-800 transition disabled:opacity-50"
-            >
-              <Send className="w-5 h-5" />
-            </button>
+            {conversationTerminee ? (
+              <button
+                onClick={handleNouvelleDemande}
+                className="w-full bg-[#1A528A] text-white py-3 rounded-full text-sm font-medium hover:bg-blue-800 transition"
+              >
+                Nouvelle demande
+              </button>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  disabled={isLoading}
+                  placeholder="Décrivez votre projet..."
+                  className="flex-1 bg-[#F6F6F3] border border-transparent focus:border-gray-300 focus:outline-none rounded-full px-6 py-3 text-sm disabled:opacity-50"
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={isLoading}
+                  className="bg-[#1A528A] text-white p-3 rounded-full hover:bg-blue-800 transition disabled:opacity-50"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </>
+            )}
           </div>
         </div>
         

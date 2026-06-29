@@ -17,12 +17,15 @@ export async function POST(req: NextRequest) {
   }
 
   const raw = await response.text()
-  let data: { reply?: string; output?: string; text?: string } = {}
+  let data: { reply?: string; output?: string; text?: string; conversation_terminee?: boolean } = {}
   try {
     data = raw ? JSON.parse(raw) : {}
   } catch {
     console.error('Reponse n8n non-JSON:', raw)
   }
 
-  return NextResponse.json({ reply: data.reply || data.output || data.text || "Je n'ai pas compris." })
+  return NextResponse.json({
+    reply: data.reply || data.output || data.text || "Je n'ai pas compris.",
+    conversation_terminee: data.conversation_terminee || false,
+  })
 }
