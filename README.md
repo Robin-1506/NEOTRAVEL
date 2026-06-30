@@ -34,6 +34,9 @@ Crée un fichier `.env.local` à la racine avec ces trois variables :
 AIRTABLE_API_KEY=ta_cle_api
 AIRTABLE_BASE_ID=ton_base_id
 AIRTABLE_TABLE_DEMANDES=Demandes
+AIRTABLE_TABLE_DEVIS=Devis
+AIRTABLE_TABLE_RELANCES=Relances
+AIRTABLE_TABLE_MATRICES=Matrices
 La clé API se trouve dans Airtable → Account → Developer Hub → Personal Access Tokens.
 Le Base ID se trouve dans l'URL de ta base Airtable (commence par `app`).
 
